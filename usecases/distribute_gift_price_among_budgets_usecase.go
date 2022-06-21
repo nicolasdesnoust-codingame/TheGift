@@ -8,7 +8,7 @@ import (
 func DistributeGiftPriceAmongBudgetsUsecase(giftPrice int, budgets []int) []int {
 
 	allParticipants := domain.NewParticipantFactory().CreateParticipants(budgets)
-	log.Printf("Gift price: %d€, number of participants: %d\n", giftPrice, len(allParticipants.Content))
+	log.Printf("Gift price: %d€, number of participants: %d\n", giftPrice, allParticipants.Size())
 
 	if allParticipants.CanAfford(giftPrice) {
 		allParticipants.DistributeAmongBudgets(giftPrice)

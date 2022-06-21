@@ -6,7 +6,7 @@ import (
 )
 
 type Participants struct {
-	Content []Participant
+	content []Participant
 }
 
 func NewParticipants(participant []Participant) *Participants {
@@ -18,8 +18,8 @@ func (allParticipants *Participants) DistributeAmongBudgets(giftPrice int) {
 	log.Printf("Average contribution (lower bound) : %d€\n", averageContribution)
 
 	log.Printf("Trying to make everyone contribute %d€\n", averageContribution)
-	for index := range allParticipants.Content {
-		allParticipants.Content[index].ContributeAsMuchAsPossible(averageContribution)
+	for index := range allParticipants.content {
+		allParticipants.content[index].ContributeAsMuchAsPossible(averageContribution)
 	}
 
 	totalContribution := allParticipants.CalculateTotalContribution()
@@ -27,16 +27,16 @@ func (allParticipants *Participants) DistributeAmongBudgets(giftPrice int) {
 
 	for totalContribution < giftPrice {
 		participants := allParticipants.FilterOutThoseWhoGaveEverything()
-		participantWithSmallestBudget := participants.Content[0]
+		participantWithSmallestBudget := participants.content[0]
 		nextContribution := participantWithSmallestBudget.CalculateBudgetLeft()
 		log.Printf("Everyone can give at least %d€\n", nextContribution)
 
-		estimatedTotalContribution := totalContribution + nextContribution*len(participants.Content)
+		estimatedTotalContribution := totalContribution + nextContribution*len(participants.content)
 		log.Printf("If everyone would give %d€, we could reach %d€\n", nextContribution, estimatedTotalContribution)
 
 		if estimatedTotalContribution <= giftPrice {
-			for index := range participants.Content {
-				participant := &participants.Content[index]
+			for index := range participants.content {
+				participant := &participants.content[index]
 				participant.Contribute(nextContribution)
 			}
 			totalContribution = estimatedTotalContribution
@@ -49,24 +49,24 @@ func (allParticipants *Participants) DistributeAmongBudgets(giftPrice int) {
 
 func (participants *Participants) shareContributionLeftAmongParticipantsLeft(giftPrice, totalContribution int, nextContribution int) {
 	amountNeeded := giftPrice - totalContribution
-	amountPerParticipant := amountNeeded / len(participants.Content)
+	amountPerParticipant := amountNeeded / len(participants.content)
 
-	for index := range participants.Content {
-		participants.Content[index].Contribute(amountPerParticipant)
-		log.Println(participants.Content[index].Contribution)
+	for index := range participants.content {
+		participants.content[index].Contribute(amountPerParticipant)
+		log.Println(participants.content[index].Contribution)
 	}
 	participantsLeft := participants.FilterOutThoseWhoGaveEverything()
-	amountLeft := amountNeeded % len(participants.Content)
+	amountLeft := amountNeeded % len(participants.content)
 
 	for i := 0; i < amountLeft; i++ {
-		participantsLeft.Content[i].Contribute(1)
+		participantsLeft.content[i].Contribute(1)
 	}
 }
 
 func (participants *Participants) CanAfford(giftPrice int) bool {
 	totalBudget := 0
 
-	for _, participant := range participants.Content {
+	for _, participant := range participants.content {
 		totalBudget += participant.Budget
 	}
 
@@ -74,7 +74,7 @@ func (participants *Participants) CanAfford(giftPrice int) bool {
 }
 
 func (participants *Participants) CalculateAverageContribution(giftPrice int) int {
-	return giftPrice / len(participants.Content)
+	return giftPrice / len(participants.content)
 }
 
 func (participants *Participants) HasContributedEnoughFor(giftPrice int) bool {
@@ -86,7 +86,7 @@ func (participants *Participants) HasContributedEnoughFor(giftPrice int) bool {
 func (participants *Participants) CalculateTotalContribution() int {
 	totalContribution := 0
 
-	for _, participant := range participants.Content {
+	for _, participant := range participants.content {
 		totalContribution += participant.Contribution
 	}
 
@@ -94,10 +94,10 @@ func (participants *Participants) CalculateTotalContribution() int {
 }
 
 func (participants *Participants) ExtractContributionsInAscendingOrder() []int {
-	contributions := make([]int, len(participants.Content))
+	contributions := make([]int, len(participants.content))
 
-	for index := range participants.Content {
-		contributions[index] = participants.Content[index].Contribution
+	for index := range participants.content {
+		contributions[index] = participants.content[index].Contribution
 	}
 
 	orderedContributions := contributions[:]
@@ -107,14 +107,18 @@ func (participants *Participants) ExtractContributionsInAscendingOrder() []int {
 
 func (participants *Participants) FilterOutThoseWhoGaveEverything() *Participants {
 	firstIndex := 0
-	lastIndex := len(participants.Content)
+	lastIndex := len(participants.content)
 
-	for _, participant := range participants.Content {
+	for _, participant := range participants.content {
 		if participant.CanContribute() {
 			break
 		}
 		firstIndex++
 	}
 
-	return NewParticipants(participants.Content[firstIndex:lastIndex])
+	return NewParticipants(participants.content[firstIndex:lastIndex])
+}
+
+func (participants *Participants) Size() int {
+	return len(participants.content)
 }
