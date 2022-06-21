@@ -18,7 +18,7 @@ func TestCalculateAverageContribution(t *testing.T) {
 	assert.Equal(t, expectedAverageContribution, actualAverageContribution)
 }
 
-func TestExtractContributions(t *testing.T) {
+func TestExtractContributionsInAscendingOrder(t *testing.T) {
 	participant1 := *NewParticipant(10)
 	participant1.Contribute(10)
 
@@ -33,12 +33,12 @@ func TestExtractContributions(t *testing.T) {
 		participant2,
 		participant3})
 
-	actualContributions := participants.ExtractContributions()
+	actualContributions := participants.ExtractContributionsInAscendingOrder()
 
 	assert.ElementsMatch(t, actualContributions, []int{10, 20, 30})
 }
 
-func TestExtractContributions_ShouldSortContributionsInAscendingOrder(t *testing.T) {
+func TestExtractContributionsInAscendingOrder_ShouldSortContributionsInAscendingOrder(t *testing.T) {
 	participant1 := *NewParticipant(30)
 	participant1.Contribute(20)
 
@@ -53,7 +53,7 @@ func TestExtractContributions_ShouldSortContributionsInAscendingOrder(t *testing
 		participant2,
 		participant3})
 
-	actualContributions := participants.ExtractContributions()
+	actualContributions := participants.ExtractContributionsInAscendingOrder()
 
 	assert.Exactly(t, actualContributions, []int{10, 20, 30})
 }

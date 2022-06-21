@@ -45,7 +45,7 @@ func DistributeGiftPriceAmongBudgetsUsecase(giftPrice int, budgets []int) []int 
 		}
 	}
 
-	return allParticipants.ExtractContributions()
+	return allParticipants.ExtractContributionsInAscendingOrder()
 }
 
 func shareContributionLeftAmongParticipantsLeft(giftPrice, totalContribution int, nextContribution int, participants *domain.Participants) {

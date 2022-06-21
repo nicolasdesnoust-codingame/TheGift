@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"log"
 	"sort"
 )
 
@@ -24,21 +23,20 @@ func (participants *Participants) CanPay(giftPrice int) bool {
 }
 
 func (participants *Participants) CalculateTotalContribution() int {
-	amountRaised := 0
+	totalContribution := 0
 
 	for _, participant := range participants.Content {
-		amountRaised += participant.Contribution
+		totalContribution += participant.Contribution
 	}
 
-	return amountRaised
+	return totalContribution
 }
 
-func (participants *Participants) ExtractContributions() []int {
+func (participants *Participants) ExtractContributionsInAscendingOrder() []int {
 	contributions := make([]int, len(participants.Content))
 
 	for index := range participants.Content {
 		contributions[index] = participants.Content[index].Contribution
-		log.Println(participants.Content[index].Contribution)
 	}
 
 	orderedContributions := contributions[:]
@@ -47,21 +45,11 @@ func (participants *Participants) ExtractContributions() []int {
 }
 
 func (participants *Participants) FilterOutThoseWhoGaveEverything() *Participants {
-	// participantsLeft := make([]Participant, 0)
-
-	// for index := range participants.Content {
-	// 	participant := &participants.Content[index]
-	// 	if participant.Contribution < participant.Budget {
-	// 		participantsLeft = append(participantsLeft, *participant)
-	// 	}
-	// }
-
 	firstIndex := 0
 	lastIndex := len(participants.Content)
 
-	for i := 0; i < len(participants.Content); i++ {
-		participant := &participants.Content[i]
-		if participant.Contribution < participant.Budget {
+	for _, participant := range participants.Content {
+		if participant.CanContribute() {
 			break
 		}
 		firstIndex++

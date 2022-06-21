@@ -32,6 +32,10 @@ func (participant *Participant) ContributeAsMuchAsPossible(targetContribution in
 	participant.Contribution = totalContribution
 }
 
+func (participant *Participant) CanContribute() bool {
+	return participant.Contribution < participant.Budget
+}
+
 func (participant *Participant) CalculateBudgetLeft() int {
 	return participant.Budget - participant.Contribution
 }

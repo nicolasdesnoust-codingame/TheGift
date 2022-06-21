@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"log"
 	"sort"
 )
 
@@ -17,7 +16,6 @@ func (factory *ParticipantFactory) CreateParticipants(budgets []int) *Participan
 	sort.Ints(orderedBudgets)
 
 	participants := make([]Participant, len(orderedBudgets))
-	log.Printf("fef %d", len(budgets))
 
 	for budgetIndex, budget := range orderedBudgets {
 		participants[budgetIndex] = *NewParticipant(budget)

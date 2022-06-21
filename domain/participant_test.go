@@ -45,3 +45,21 @@ func TestContributeAsMuchAsPossible_ShouldAcceptBellowBudget(t *testing.T) {
 
 	assert.Equal(t, 20, participant.Contribution)
 }
+
+func TestCanContribute_ShouldTellParticipantCanContribute(t *testing.T) {
+	participant := NewParticipant(10)
+	participant.Contribute(5)
+
+	canContribute := participant.CanContribute()
+
+	assert.True(t, canContribute)
+}
+
+func TestCanContribute_ShouldTellParticipantCanNotContribute(t *testing.T) {
+	participant := NewParticipant(10)
+	participant.Contribute(10)
+
+	canContribute := participant.CanContribute()
+
+	assert.False(t, canContribute)
+}
