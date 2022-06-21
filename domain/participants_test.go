@@ -58,18 +58,18 @@ func TestExtractContributionsInAscendingOrder_ShouldSortContributionsInAscending
 	assert.Exactly(t, actualContributions, []int{10, 20, 30})
 }
 
-func TestCanPay_ShouldReturnFalse(t *testing.T) {
+func TestHasContributedEnoughForGift_ShouldReturnFalse(t *testing.T) {
 	participants := NewParticipants([]Participant{
 		*NewParticipant(10),
 		*NewParticipant(10),
 		*NewParticipant(10)})
 
-	canPay := participants.CanPay(100)
+	hasContributedEnough := participants.HasContributedEnoughFor(100)
 
-	assert.False(t, canPay)
+	assert.False(t, hasContributedEnough)
 }
 
-func TestCanPay_ShouldReturnTrue(t *testing.T) {
+func TestHasContributedEnoughForGift_ShouldReturnTrue(t *testing.T) {
 	participant1 := *NewParticipant(30)
 	participant1.Contribute(20)
 
@@ -84,9 +84,31 @@ func TestCanPay_ShouldReturnTrue(t *testing.T) {
 		participant2,
 		participant3})
 
-	canPay := participants.CanPay(60)
+	hasContributedEnough := participants.HasContributedEnoughFor(60)
 
-	assert.True(t, canPay)
+	assert.True(t, hasContributedEnough)
+}
+
+func TestCanAfford_ShouldReturnFalse(t *testing.T) {
+	participants := NewParticipants([]Participant{
+		*NewParticipant(10),
+		*NewParticipant(10),
+		*NewParticipant(10)})
+
+	canAfford := participants.CanAfford(100)
+
+	assert.False(t, canAfford)
+}
+
+func TestCanAfford_ShouldReturnTrue(t *testing.T) {
+	participants := NewParticipants([]Participant{
+		*NewParticipant(10),
+		*NewParticipant(10),
+		*NewParticipant(10)})
+
+	canAfford := participants.CanAfford(30)
+
+	assert.True(t, canAfford)
 }
 
 func TestCalculateTotalContribution_ShouldReturnValidValue(t *testing.T) {
