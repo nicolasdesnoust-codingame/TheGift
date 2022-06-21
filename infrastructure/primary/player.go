@@ -6,6 +6,14 @@ import (
 )
 
 func main() {
+	giftPrice, budgets := parseInputs()
+
+	contributions := usecases.DistributeGiftPriceAmongBudgetsUsecase(giftPrice, budgets)
+
+	printAnswer(contributions)
+}
+
+func parseInputs() (int, []int) {
 	var participantCount int
 	fmt.Scan(&participantCount)
 
@@ -19,8 +27,10 @@ func main() {
 		budgets[i] = budget
 	}
 
-	contributions := usecases.DistributeGiftPriceAmongBudgetsUsecase(giftPrice, budgets)
+	return giftPrice, budgets
+}
 
+func printAnswer(contributions []int) {
 	if len(contributions) == 0 {
 		fmt.Println("IMPOSSIBLE")
 	}
